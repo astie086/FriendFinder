@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Survey</title>
+    <script src = "https://code.jquery.com/jquery.js"></script>
+      </head>
+  <body>
+      
+         <h3>Survey Questions</h3>
+         <h3>About You</h3>
+          <form>
+                     <div class = "Start">
+                           <div class = "form-group">
+                               <label>Name  </label>
+                               <input class = "form-control" id = "username" type = "text" required>
+                           </div>
+                    </div>
+
+                     <p>On the scale of 1 to 5 with 1 being 'You hate it' and 5 'You Love it'</p>
+
+                      <div class = "form-group">
+
+                           <h3>Question 1</h3>
+                           <label>The beach or lake    :   </label>
+                                <select class = "form-control" id = "answer1">
+                                    <option value = "1">1</option>
+                                    <option value = "2">2</option>
+                                    <option value = "2">3</option>
+                                    <option value = "4">4</option>
+                                    <option value = "5">5</option>
+                                </select>
+                     </div>
+                     <div class = "form-group">
+
+                          <h3>Question 2</h3>
+                          <label>The desert or sahara  :  </label>
+                      <!--    <input list = "answer2" name ="answer2"> -->
+                                <select class = "form-control" id = "answer2">
+                                    <option value = "1">1</option>
+                                    <option value = "2">2</option>
+                                    <option value = "2">3</option>
+                                    <option value = "4">4</option>
+                                    <option value = "5">5</option>
+                                </select>
+                    </div>
+                    <div class = "form-group">
+                        <h3>Question 3</h3>
+                         <label>Snow   : </label>
+                         <!--<input list = "answer3" name ="answer3"> -->
+                              <select class = "form-control" id = "answer3">
+                                  <option value = "1">1</option>
+                                  <option value = "2">2</option>
+                                  <option value = "2">3</option>
+                                  <option value = "4">4</option>
+                                  <option value = "5">5</option>
+                              </select>
+                   </div>
+                   <div class = "form-group">
+                       <h3>Question 4</h3>
+                        <label>Forest or jungles   :  </label>
+                        <!--<input list = "answer4" name ="answer4"> -->
+                             <select class = "form-control" id = "answer4">
+                                 <option value = "1">1</option>
+                                 <option value = "2">2</option>
+                                 <option value = "2">3</option>
+                                 <option value = "4">4</option>
+                                 <option value = "5">5</option>
+                             </select>
+                  </div>
+                  <div class = "form-group">
+                        <h3>Question 5</h3>
+                         <label> Grasslands   :   </label>
+                        <!--<input list = "answer5" name ="answer5"> -->
+                              <select class = "form-control" id = "answer5">
+                                  <option value = "1">1</option>
+                                  <option value = "2">2</option>
+                                  <option value = "2">3</option>
+                                  <option value = "4">4</option>
+                                  <option value = "5">5</option>
+                              </select>
+                 </div>
+                 <br />
+                 <button class = "btn btn-info btn-primary btn-block" id = "searchbtn">Search</button>
+          </form>
+      </div>
+      <br /><br />
+
+      <div class = "container" id = "result">
+           <h4>Sailor Match</h4><br />
+           <h3 id= "matchname"></h3> <br />
+           <img id= "matchpic" height = 500 width = 500></img>
+           <h3 id ="ssscore"></h4>
+      </div>
+
+    
+  </body>
+  <script type = "text/javascript">
+       $(document).ready(function()
+        {
+                 $("#result").hide();
+                 function findmatch()
+                 {
+
+                  var ss_name = '';
+                   var ss_img = '';
+                   var ss_score = 0;
+                   var ssusername =  $("#usname").val();
+                   var ssphoto = $("#photo").val();
+                   var ssans1 = $("#answer1").val().trim();
+                   var ssans2 = $("#answer2").val().trim()
+                   var ssans3 = $("#answer3").val().trim();
+                   var ssans4 = $("#answer4").val().trim();
+                   var ssans5 = $("#answer5").val().trim();
+                   console.log('The url:',currentURL+'/api/friends');
+                   console.log(`${ssusername} username`)
+                   console.log(`${ssphoto} photo`);
+                   console.log(`${ssans1} ans1`);
+                   console.log(`${ssans2} ans2`);
+                   console.log(`${ssans3} ans3`);
+                   var newuser = {
+                                    name : ssusername,
+                                    photo : ssphoto,
+                                    scores:[ssans1,ssans2,ssans3,ssans4,ssans5]
+                                  };
+                   $.ajax({url: currentURL+"/api/friends",method:"GET"}).done(function(frienddata)
+                   {
+                         console.log('The url:',currentURL+'/api/friends');
+                         console.log('frienddata',frienddata);
+                         var bestscore = 20;
+                         for(var i =0 ; i < frienddata.length; i++)
+                         {
+                                 console.log(frienddata[i].name,'name in for');
+                                 console.log(frienddata[i].scores[0]);
+                                 console.log(frienddata[i].scores[1])
+                                 var compscore = 0;
+                                 var sc1 =  Math.abs(ssans1 - (frienddata[i].scores[0]));
+                                 var sc2 =  Math.abs(ssans2 - (frienddata[i].scores[1]));
+                                 var sc3 =  Math.abs(ssans3 - (frienddata[i].scores[2]));
+                                 var sc4 =  Math.abs(ssans4 - (frienddata[i].scores[3]));
+                                 var sc5 =  Math.abs(ssans5 - (frienddata[i].scores[4]));
+                                 compscore = sc1 + sc2 + sc3 + sc4 +sc5 ;
+                                 console.log('compscore',compscore);
+                                 if ( compscore < bestscore)
+                                 {
+                                   bestscore = compscore ;
+                                   ss_name = frienddata[i].name ;
+                                   ss_img = frienddata[i].photo ;
+                                   ss_score = compscore;
+                                 }
+                          }
+                          $("#result").show();
+                          $("#matchname").text(`Name: ${ss_name}`) ;
+                          $("#matchpic").attr('src',ss_img);
+                          
+                   });
+                   $.post((currentURL+"/api/friends"),newuser, function(data)
+                   {
+                        if(data) console.log("Added new user");
+                   });
+                   
+                 }
+                 $("#searchbtn").on("click",function(event)
+                   {
+                      event.preventDefault() ;
+                      console.log('In click of search');
+                      findmatch();
+                   });
+      });
+  </script>
+</html>
